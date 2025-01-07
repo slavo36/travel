@@ -1,0 +1,21 @@
+.flatpickr-day {
+    border-radius: 0 !important;
+    width: 2.5em;
+    height: 2.5em;
+    line-height: 1.4 !important;
+    margin: 0.2em !important;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+}
+
+.price-info {
+    display: block;
+    font-size: 0.8em;
+    color: #888;
+    line-height: 1.2;
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+}

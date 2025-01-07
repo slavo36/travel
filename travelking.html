@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <script src="js/vanilla.js"></script>
+    <style src="css/travelking.css"></style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  </head>
+  <body>
+    <input
+      class="flatpickr flatpickr-input"
+      type="text"
+      id="flatpickr"
+      placeholder="Select date "
+      readonly="readonly"
+    />
+
+    <button id="Check">Check availability</button>
+  </body>
+  <script>
+    
+    const pricingData = {
+    "2024-11-01": "$200",
+    "2024-11-02": "$250",
+    "2024-11-03": "$300"
+    // Add more dates and prices as needed
+};
+    
+    
+    
+    flatpickr("#flatpickr", {
+      mode: "range",
+      onDayCreate: (dObj, dStr, fp, dayElem) => {
+        const dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d"); // Correctly format date as YYYY-MM-DD
+
+
+
+
+        
+        if (pricingData[dateStr]) {
+            // Add a span with the price for the date
+            const priceElem = document.createElement("span");
+            priceElem.className = "price-info";
+            priceElem.textContent = pricingData[dateStr];
+            dayElem.appendChild(priceElem);
+        } else {
+            // Add a span with a "-" if there is no price for the date
+            const priceElem = document.createElement("span");
+            priceElem.className = "price-info";
+            priceElem.textContent = "-";
+            dayElem.appendChild(priceElem);
+        }
+            
+    }  });
+
+    const checkBtn = document.getElementById("Check");
+
+    checkBtn.addEventListener("click", function () {
+      var req = new XMLHttpRequest();
+
+      req.open(
+        "GET",
+        "https://api.travelcircus.net/hotels/17080/checkins?E&party=%7B%22adults%22:2,%22children%22:%5B%5D%7D&domain=de&date_start=2025-01-01&date_end=2025-06-31",
+        true
+      );
+
+      req.onload = function () {
+        if (req.status >= 200 && req.status < 400) {
+          // Success!
+          var data = JSON.parse(req.responseText);
+
+          console.log(data);
+        } else {
+          // Error :(
+          console.error("Error:", req.statusText);
+        }
+      };
+
+      req.onerror = function () {
+        // Error :(
+        console.error("Connection error");
+      };
+
+      req.send();
+    });
+  </script>
+</html>
