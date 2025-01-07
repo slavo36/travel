@@ -24,23 +24,15 @@
   <script>
     
     const pricingData = {
-    "2024-11-01": "$200",
-    "2024-11-02": "$250",
-    "2024-11-03": "$300"
-    // Add more dates and prices as needed
+    "2025-01-09": "$200",
+    "2024-01-10": "$250",
+    "2025-01-11": "$300"
+    
 };
-    
-    
-    
     flatpickr("#flatpickr", {
       mode: "range",
       onDayCreate: (dObj, dStr, fp, dayElem) => {
         const dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d"); // Correctly format date as YYYY-MM-DD
-
-
-
-
-        
         if (pricingData[dateStr]) {
             // Add a span with the price for the date
             const priceElem = document.createElement("span");
@@ -54,14 +46,11 @@
             priceElem.textContent = "-";
             dayElem.appendChild(priceElem);
         }
-            
     }  });
 
     const checkBtn = document.getElementById("Check");
-
     checkBtn.addEventListener("click", function () {
       var req = new XMLHttpRequest();
-
       req.open(
         "GET",
         "https://api.travelcircus.net/hotels/17080/checkins?E&party=%7B%22adults%22:2,%22children%22:%5B%5D%7D&domain=de&date_start=2025-01-01&date_end=2025-06-31",
