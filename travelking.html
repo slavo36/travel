@@ -3,7 +3,7 @@
   <head>
     <title></title>
     <script src="js/vanilla.js"></script>
-    <style src="css/travelking.css"></style>
+    <link rel= "stylesheet" href="css/travelking.css"></link>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
@@ -22,10 +22,54 @@
     <button id="Check">Check availability</button>
   </body>
   <script>
-    
+    const checkBtn = document.getElementById("Check");
+    const pom = []; 
+    checkBtn.addEventListener("click", function () {
+      var req = new XMLHttpRequest();
+      req.open(
+        "GET",
+        "https://api.travelcircus.net/hotels/17080/checkins?E&party=%7B%22adults%22:2,%22children%22:%5B%5D%7D&domain=de&date_start=2025-01-01&date_end=2025-06-31",
+        true
+      );
+
+      req.onload = function () {
+        if (req.status >= 200 && req.status < 400) {
+          // Success!
+          var data = JSON.parse(req.responseText);
+ 
+           //var pom = []; 
+          
+            console.log(data); 
+           if(data._embedded.hotel_availabilities){
+           data._embedded.hotel_availabilities.forEach(element => {
+            pom.push({[element.date]:element.price}) 
+           
+
+
+           });
+          }
+            
+           console.log("TEST",pom);
+
+          //parsovanie data
+
+          console.log(data);
+        } else {
+          // Error :(
+          console.error("Error:", req.statusText);
+        }
+      };
+
+      req.onerror = function () {
+        // Error :(
+        console.error("Connection error");
+      };
+
+      req.send();
+    });
     const pricingData = {
     "2025-01-09": "$200",
-    "2024-01-10": "$250",
+    "2025-01-10": "$250",
     "2025-01-11": "$300"
     
 };
@@ -47,34 +91,5 @@
             dayElem.appendChild(priceElem);
         }
     }  });
-
-    const checkBtn = document.getElementById("Check");
-    checkBtn.addEventListener("click", function () {
-      var req = new XMLHttpRequest();
-      req.open(
-        "GET",
-        "https://api.travelcircus.net/hotels/17080/checkins?E&party=%7B%22adults%22:2,%22children%22:%5B%5D%7D&domain=de&date_start=2025-01-01&date_end=2025-06-31",
-        true
-      );
-
-      req.onload = function () {
-        if (req.status >= 200 && req.status < 400) {
-          // Success!
-          var data = JSON.parse(req.responseText);
-
-          console.log(data);
-        } else {
-          // Error :(
-          console.error("Error:", req.statusText);
-        }
-      };
-
-      req.onerror = function () {
-        // Error :(
-        console.error("Connection error");
-      };
-
-      req.send();
-    });
   </script>
 </html>
