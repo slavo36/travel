@@ -3,6 +3,7 @@
   <head>
     <title></title>
     <script src="js/vanilla.js"></script>
+    <script src = "js/travelking.js"></script>
     <link rel= "stylesheet" href="css/travelking.css"></link>
     <link
       rel="stylesheet"
@@ -10,86 +11,27 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   </head>
-  <body>
-    <input
+  <body onLoad="onLoad()">
+   
+    <button id="modalDialog">Check availability</button>
+    
+ 
+    <div id="myModal" class="modal"> 
+    <div class="modal-content" >
+      <span class="close">&times;</span>
+
+      <h2>Modal Title</h2>
+      <input
       class="flatpickr flatpickr-input"
       type="text"
       id="flatpickr"
       placeholder="Select date "
       readonly="readonly"
-    />
+      />
+     </div>
+    </div>
 
-    <button id="Check">Check availability</button>
+
   </body>
-  <script>
-    const checkBtn = document.getElementById("Check");
-    const pom = []; 
-    checkBtn.addEventListener("click", function () {
-      var req = new XMLHttpRequest();
-      req.open(
-        "GET",
-        "https://api.travelcircus.net/hotels/17080/checkins?E&party=%7B%22adults%22:2,%22children%22:%5B%5D%7D&domain=de&date_start=2025-01-01&date_end=2025-06-31",
-        true
-      );
-
-      req.onload = function () {
-        if (req.status >= 200 && req.status < 400) {
-          // Success!
-          var data = JSON.parse(req.responseText);
- 
-           //var pom = []; 
-          
-            console.log(data); 
-           if(data._embedded.hotel_availabilities){
-           data._embedded.hotel_availabilities.forEach(element => {
-            pom.push({[element.date]:element.price}) 
-           
-
-
-           });
-          }
-            
-           console.log("TEST",pom);
-
-          //parsovanie data
-
-          console.log(data);
-        } else {
-          // Error :(
-          console.error("Error:", req.statusText);
-        }
-      };
-
-      req.onerror = function () {
-        // Error :(
-        console.error("Connection error");
-      };
-
-      req.send();
-    });
-    const pricingData = {
-    "2025-01-09": "$200",
-    "2025-01-10": "$250",
-    "2025-01-11": "$300"
-    
-};
-    flatpickr("#flatpickr", {
-      mode: "range",
-      onDayCreate: (dObj, dStr, fp, dayElem) => {
-        const dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d"); // Correctly format date as YYYY-MM-DD
-        if (pricingData[dateStr]) {
-            // Add a span with the price for the date
-            const priceElem = document.createElement("span");
-            priceElem.className = "price-info";
-            priceElem.textContent = pricingData[dateStr];
-            dayElem.appendChild(priceElem);
-        } else {
-            // Add a span with a "-" if there is no price for the date
-            const priceElem = document.createElement("span");
-            priceElem.className = "price-info";
-            priceElem.textContent = "-";
-            dayElem.appendChild(priceElem);
-        }
-    }  });
-  </script>
+  
 </html>
