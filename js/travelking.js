@@ -25,7 +25,7 @@ function onLoad() {
         console.log(data);
         if (data._embedded.hotel_availabilities) {
           data._embedded.hotel_availabilities.forEach((element) => {
-            price.push({ [element.date]: element.price });
+            price.push({ date: element.date, price: element.price });
           });
         }
 
@@ -51,12 +51,13 @@ function onLoad() {
       console.log("currentDate", dateStr);
 
       if (price.length > 0){
-      if (price[dateStr]) { 
-        console.log("TEST", price[dateStr]);
+        var item = price.find(x => x.date == dateStr);
+      if (item) { 
+        console.log("TEST", item);
         // Add a span with the price for the date
         const priceElem = document.createElement("span");
         priceElem.className = "price-info";
-        priceElem.textContent = price[dateStr];
+        priceElem.textContent = item.price + ' €';
         dayElem.appendChild(priceElem);
       } else {
         // Add a span with a "-" if there is no price for the date
